@@ -2,12 +2,11 @@ package com.PigeonSkyRace.Pigeon.service.impl;
 
 import com.PigeonSkyRace.Pigeon.model.Competition;
 import com.PigeonSkyRace.Pigeon.repository.CompetitionRepository;
-import com.PigeonSkyRace.Pigeon.service.CompetitionInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CompetitionService implements CompetitionInterface {
+public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.CompetitionService {
     @Autowired
     private CompetitionRepository competitionRepository;
     @Override

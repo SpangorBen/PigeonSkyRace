@@ -2,7 +2,6 @@ package com.PigeonSkyRace.Pigeon.service.impl;
 
 import com.PigeonSkyRace.Pigeon.model.Pigeon;
 import com.PigeonSkyRace.Pigeon.repository.PigeonRepository;
-import com.PigeonSkyRace.Pigeon.service.PigeonInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +9,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @Service
-public class PigeonService implements PigeonInterface {
+public class PigeonServiceImpl implements com.PigeonSkyRace.Pigeon.service.PigeonService {
 
     @Autowired
     private PigeonRepository pigeonRepository;

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -17,6 +18,7 @@ public class Pigeon {
     private int age;
     private String gender;
     private String color;
+    @Indexed(unique = true)
     private String badge;
     private String breederId;
     private String competitionId;

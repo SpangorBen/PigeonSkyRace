@@ -2,6 +2,7 @@ package com.PigeonSkyRace.Pigeon.controller;
 
 import com.PigeonSkyRace.Pigeon.model.Pigeon;
 import com.PigeonSkyRace.Pigeon.service.PigeonService;
+import com.PigeonSkyRace.Pigeon.service.ResultIService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class BreederController {
 
     @Autowired
     private PigeonService pigeonService;
+    @Autowired
+    private ResultIService resultIService;
 
     @PostMapping("/addPigeon")
     public ResponseEntity<?> addPigeon(HttpServletRequest request, @RequestBody Pigeon pigeon) {
@@ -36,5 +39,10 @@ public class BreederController {
     @GetMapping("getAllPigeons")
     public ResponseEntity<?> getAllPigeons() {
         return ResponseEntity.status(HttpStatus.OK).body(pigeonService.getAllPigeons());
+    }
+
+    @GetMapping("allResults")
+    public ResponseEntity<?> getAllResults() {
+        return ResponseEntity.status(HttpStatus.OK).body(resultIService.getAllResults());
     }
 }

@@ -12,6 +12,7 @@ public class FlightTimeUtil {
 
     public static double formatDuration(Duration duration) {
         long hours = duration.toHours();
+
         long minutes = duration.toMinutesPart();
         long seconds = duration.toSecondsPart();
         return hours + (minutes / 60.0) + (seconds / 3600.0);

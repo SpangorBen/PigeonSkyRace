@@ -15,11 +15,11 @@ public class Result {
     @Id
     private String id;
     private int points;
-    private int speed;
+    private double speed;
     private int ranking;
-    private int distance;
+    private double distance;
     private LocalTime time;
-    private String flightTime;
+    private double flightTime;
     private LocalDateTime arrivalDate;
     private String competitionId;
     private String pigeonId;

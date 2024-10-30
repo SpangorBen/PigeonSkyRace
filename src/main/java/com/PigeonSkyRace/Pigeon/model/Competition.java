@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class Competition {
     private String id;
     private String name;
     private String distance;
-    private LocalDateTime StartDate;
+    private LocalDateTime startDate;
     private String longitude;
     private String latitude;
     private Boolean isOpen;

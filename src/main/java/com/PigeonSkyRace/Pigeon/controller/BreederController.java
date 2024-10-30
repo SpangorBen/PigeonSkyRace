@@ -25,4 +25,9 @@ public class BreederController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
         }
     }
+
+    @GetMapping("getAllPigeons")
+    public ResponseEntity<?> getAllPigeons() {
+        return ResponseEntity.status(HttpStatus.OK).body(pigeonService.getAllPigeons());
+    }
 }

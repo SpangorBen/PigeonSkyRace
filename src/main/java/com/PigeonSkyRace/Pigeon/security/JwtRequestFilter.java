@@ -26,20 +26,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader  = request.getHeader("Authorization");
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7);
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Unauthorized: Missing or invalid Authorization header.");
+            return;
+        }
 
-            try {
-                Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
-                JWT.require(algorithm).build().verify(token);
+        String token = authorizationHeader.substring(7);
 
-                String breederId = JWT.decode(token).getClaim("breederId").asString();
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
+            JWT.require(algorithm).build().verify(token);
 
-            } catch (Exception e) {
-                logger.severe("Error: " + e.getMessage());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
-            }
+            String breederId = JWT.decode(token).getClaim("breederId").asString();
+            request.setAttribute("breederId", breederId);
+
+        } catch (Exception e) {
+            logger.severe("Error: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Unauthorized: Token verification failed.");
+            return;
         }
         filterChain.doFilter(request, response);
     }

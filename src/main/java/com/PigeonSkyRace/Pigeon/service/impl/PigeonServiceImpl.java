@@ -5,6 +5,7 @@ import com.PigeonSkyRace.Pigeon.repository.PigeonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -27,5 +28,10 @@ public class PigeonServiceImpl implements com.PigeonSkyRace.Pigeon.service.Pigeo
     private int generateUniqueNumber() {
         Random random = new Random();
         return 10000 + random.nextInt(90000);
+    }
+
+    @Override
+    public List<Pigeon> getAllPigeons(){
+        return pigeonRepository.findAll();
     }
 }

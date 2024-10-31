@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.CompetitionService {
+
     @Autowired
     private CompetitionRepository competitionRepository;
     @Autowired
@@ -35,5 +36,11 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
         } else {
             return Optional.empty();
         }
+        return Optional.empty();
+    }
+
+    @Override
+    public Competition getCompetitionById(String competitionId) {
+        return competitionRepository.findById(competitionId).orElseThrow(() -> new IllegalArgumentException("Competition not found"));
     }
 }

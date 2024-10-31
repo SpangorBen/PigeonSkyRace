@@ -21,5 +21,4 @@ public class Pigeon {
     @Indexed(unique = true)
     private String badge;
     private String breederId;
-    private String competitionId;
 }

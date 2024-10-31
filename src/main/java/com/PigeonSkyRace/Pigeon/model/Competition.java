@@ -26,8 +26,5 @@ public class Competition {
     private String latitude;
     private Boolean isOpen;
     private TypeEnum type;
-    @DocumentReference
-    private List<Result> results;
-    @DocumentReference
-    private List<Pigeon> pigeons;
+
 }

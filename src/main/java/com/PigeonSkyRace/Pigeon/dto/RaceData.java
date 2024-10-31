@@ -9,11 +9,11 @@ import java.time.format.DateTimeParseException;
 @Getter
 public class RaceData {
 
-    private String ringNumber;
+    private String badge;
     private LocalDateTime arrivalTime;
 
     public RaceData(String ringNumber, String arrivalTimeString) {
-        this.ringNumber = ringNumber.trim().replace("\u0000", "");
+        this.badge = ringNumber.trim().replace("\u0000", "");
 
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

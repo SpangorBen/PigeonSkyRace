@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface BreederService {
     Breeder createBreeder(Breeder breeder);
     Optional<Breeder> findByEmail(String email);
+    Breeder getBreederById(String breederId);
 }

@@ -9,6 +9,10 @@ import java.util.List;
 public class SpeedCalculatorUtil {
 
     public static double calculateSpeed(double flightTime, double averageDistance) {
+        if (flightTime == 0) {
+            return 0;
+        }
+
         return averageDistance / flightTime;
     }
 

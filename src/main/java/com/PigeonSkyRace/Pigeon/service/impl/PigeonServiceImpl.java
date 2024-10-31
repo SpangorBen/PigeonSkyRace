@@ -1,19 +1,26 @@
 package com.PigeonSkyRace.Pigeon.service.impl;
 
+import com.PigeonSkyRace.Pigeon.model.Competition;
 import com.PigeonSkyRace.Pigeon.model.Pigeon;
+import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.repository.PigeonRepository;
+import com.PigeonSkyRace.Pigeon.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PigeonServiceImpl implements com.PigeonSkyRace.Pigeon.service.PigeonService {
 
     @Autowired
     private PigeonRepository pigeonRepository;
+
+    @Autowired
+    private ResultRepository resultRepository;
 
     @Override
     public Pigeon addPigeon(Pigeon pigeon) {
@@ -33,5 +40,13 @@ public class PigeonServiceImpl implements com.PigeonSkyRace.Pigeon.service.Pigeo
     @Override
     public List<Pigeon> getAllPigeons(){
         return pigeonRepository.findAll();
+    }
+
+    @Override
+    public List<Pigeon> getPigeonsByCompetitionId(String competitionId) {
+        List<Result> results = resultRepository.findByCompetitionId(competitionId);
+        return results.stream()
+                .map(Result::getPigeon)
+                .collect(Collectors.toList());
     }
 }

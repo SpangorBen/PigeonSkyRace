@@ -3,6 +3,7 @@ package com.PigeonSkyRace.Pigeon.controller;
 import com.PigeonSkyRace.Pigeon.dto.RaceData;
 import com.PigeonSkyRace.Pigeon.model.Competition;
 import com.PigeonSkyRace.Pigeon.service.CompetitionService;
+import com.PigeonSkyRace.Pigeon.service.ResultIService;
 import com.PigeonSkyRace.Pigeon.util.CsvParserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/organizer")
 public class OrganizerController {
+
     @Autowired
     private CompetitionService competitionService;
+
+    @Autowired
+    private ResultIService resultService;
 
     @PostMapping("/addCompetition")
     public ResponseEntity<?> addCompetition(@RequestBody Competition competition) {
@@ -36,11 +41,12 @@ public class OrganizerController {
     }
 
 
-    @PostMapping("/results")
-    public ResponseEntity<?> uploadRaceData(@RequestParam("file")MultipartFile file){
+    @PostMapping("/{competitionId}/results")
+    public ResponseEntity<?> uploadRaceData(@RequestParam("file")MultipartFile file, @PathVariable String competitionId) {
 
         try {
             List<RaceData> raceDataList = CsvParserUtil.parseCsvFile(file);
+            resultService.processRaceData(competitionId, raceDataList);
             return ResponseEntity.status(HttpStatus.OK).body(raceDataList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

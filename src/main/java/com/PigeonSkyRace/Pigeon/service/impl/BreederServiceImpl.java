@@ -29,4 +29,10 @@ public class BreederServiceImpl implements BreederService {
     public Optional<Breeder> findByEmail(String email) {
         return breederRepository.findByEmail(email);
     }
+
+    @Override
+    public Breeder getBreederById(String breederId) {
+        return breederRepository.findById(breederId)
+                .orElseThrow(() -> new IllegalArgumentException("no breeder found with id: " + breederId));
+    }
 }

@@ -59,6 +59,11 @@ public class ResultServiceImpl implements ResultIService {
     }
 
     @Override
+    public List<Result> getCompetitionResults(String competitionId) {
+        return resultRepository.findAll().stream().filter(result -> competitionId.contains(result.getCompetition().getId())).collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public void processRaceData(String competitionId, List<RaceData> raceDataList) {
         Competition competition = competitionService.getCompetitionById(competitionId);

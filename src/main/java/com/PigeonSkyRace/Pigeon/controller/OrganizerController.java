@@ -55,7 +55,12 @@ public class OrganizerController {
         }
     }
 
-
+    @PostMapping("/displayAllCompetitionResults")
+    public ResponseEntity<?> displayAllCompetitionResults(@RequestParam String competitionId) {
+        List<Result> results = resultService.getCompetitionResults(competitionId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(results);
+    }
+    
     @PostMapping("/{competitionId}/results")
     public ResponseEntity<?> uploadRaceData(@RequestParam("file")MultipartFile file, @PathVariable String competitionId) {
 

@@ -2,8 +2,10 @@ package com.PigeonSkyRace.Pigeon.service.impl;
 
 import com.PigeonSkyRace.Pigeon.model.Competition;
 import com.PigeonSkyRace.Pigeon.model.Pigeon;
+import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.repository.CompetitionRepository;
 import com.PigeonSkyRace.Pigeon.repository.PigeonRepository;
+import com.PigeonSkyRace.Pigeon.repository.ResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
     @Autowired
     private CompetitionRepository competitionRepository;
     @Autowired
+    private ResultRepository resultRepository;
+    @Autowired
     private PigeonRepository pigeonRepository;
 
     @Override
@@ -24,19 +28,21 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
     }
 
     @Override
-    public Optional<Competition> updateCompetition(String id, String badge) {
-//        List<Pigeon> pigeons = pigeonRepository.findByBadge(badge);
-//        Optional<Competition> competitionResult = competitionRepository.findById(id);
-//
-//        if (competitionResult.isPresent() && competitionResult.get().getIsOpen().equals(true)) {
-//            Competition competition = competitionResult.get();
-//            competition.setPigeons(pigeons);
-//            competitionRepository.save(competition);
-//            return Optional.of(competition);
-//        } else {
-//            return Optional.empty();
-//        }
-        return Optional.empty();
+
+    public Optional<Result> updateCompetition(String id, String badge) {
+        Pigeon pigeons = pigeonRepository.findByBadge(badge).getFirst();
+        Optional<Competition> competitionResult = competitionRepository.findById(id);
+
+        if (competitionResult.isPresent() && competitionResult.get().getIsOpen().equals(true)) {
+            Competition competition = competitionResult.get();
+            Result result = new Result();
+            result.setPigeon(pigeons);
+            result.setCompetition(competition);
+            resultRepository.save(result);
+            return Optional.of(result);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override

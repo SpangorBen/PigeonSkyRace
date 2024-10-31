@@ -4,6 +4,7 @@ import com.PigeonSkyRace.Pigeon.model.Pigeon;
 import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.service.PigeonService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
+import com.PigeonSkyRace.Pigeon.util.PigeonValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class BreederController {
             String breederId = (String) request.getAttribute("breederId");
             if (breederId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized:  Missing breeder ID.");
+            }
+            String validationError = PigeonValidator.validatePigeonData(pigeon);
+            if (validationError != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
             }
 
             pigeon.setBreederId(breederId);
@@ -58,4 +63,5 @@ public class BreederController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
         }
     }
+
 }

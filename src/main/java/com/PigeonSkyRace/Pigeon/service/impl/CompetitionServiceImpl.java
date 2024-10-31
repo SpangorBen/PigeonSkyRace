@@ -25,17 +25,17 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
 
     @Override
     public Optional<Competition> updateCompetition(String id, String badge) {
-        List<Pigeon> pigeons = pigeonRepository.findByBadge(badge);
-        Optional<Competition> competitionResult = competitionRepository.findById(id);
-
-        if (competitionResult.isPresent() && competitionResult.get().getIsOpen().equals(true)) {
-            Competition competition = competitionResult.get();
-            competition.setPigeons(pigeons);
-            competitionRepository.save(competition);
-            return Optional.of(competition);
-        } else {
-            return Optional.empty();
-        }
+//        List<Pigeon> pigeons = pigeonRepository.findByBadge(badge);
+//        Optional<Competition> competitionResult = competitionRepository.findById(id);
+//
+//        if (competitionResult.isPresent() && competitionResult.get().getIsOpen().equals(true)) {
+//            Competition competition = competitionResult.get();
+//            competition.setPigeons(pigeons);
+//            competitionRepository.save(competition);
+//            return Optional.of(competition);
+//        } else {
+//            return Optional.empty();
+//        }
         return Optional.empty();
     }
 

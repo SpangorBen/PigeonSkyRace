@@ -5,5 +5,5 @@ import com.PigeonSkyRace.Pigeon.model.Result;
 import java.util.List;
 
 public interface ResultIService {
-    List<Result> getAllResults();
+    List<Result> getAllBreederResults(String breederId);
 }

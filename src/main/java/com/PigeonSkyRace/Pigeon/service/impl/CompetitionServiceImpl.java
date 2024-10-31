@@ -28,6 +28,7 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
     }
 
     @Override
+
     public Optional<Result> updateCompetition(String id, String badge) {
         Pigeon pigeons = pigeonRepository.findByBadge(badge).getFirst();
         Optional<Competition> competitionResult = competitionRepository.findById(id);

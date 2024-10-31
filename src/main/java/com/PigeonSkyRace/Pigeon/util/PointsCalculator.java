@@ -21,6 +21,7 @@ public class PointsCalculator {
             int rank = i + 1;
             double points = calculatePointsForRank(rank, totalParticipants);
             result.setPoints((int) points);
+            result.setRanking(rank);
         }
     }
 

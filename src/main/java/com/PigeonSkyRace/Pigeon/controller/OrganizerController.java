@@ -2,12 +2,15 @@ package com.PigeonSkyRace.Pigeon.controller;
 
 import com.PigeonSkyRace.Pigeon.dto.RaceData;
 import com.PigeonSkyRace.Pigeon.model.Competition;
+import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.service.CompetitionService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
+import com.PigeonSkyRace.Pigeon.util.CompetitionValidator;
 import com.PigeonSkyRace.Pigeon.util.CsvParserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,13 +29,25 @@ public class OrganizerController {
 
     @PostMapping("/addCompetition")
     public ResponseEntity<?> addCompetition(@RequestBody Competition competition) {
+        String validationError = CompetitionValidator.validateCompetitionData(competition);
+        if (validationError != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+        }
+
         Competition savedCompetition = competitionService.addCompetition(competition);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCompetition);
     }
 
     @PutMapping("/updateCompetition")
     public ResponseEntity<?> updateCompetition(@RequestParam String id, @RequestParam String badge) {
-        Optional<Competition> updatedCompetition = competitionService.updateCompetition(id, badge);
+        if (!StringUtils.hasText(id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("competition id is required");
+        }
+        if (!StringUtils.hasText(badge)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("pigeon badge is required");
+        }
+
+        Optional<Result> updatedCompetition = competitionService.updateCompetition(id, badge);
         if (updatedCompetition.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(updatedCompetition);
         } else {

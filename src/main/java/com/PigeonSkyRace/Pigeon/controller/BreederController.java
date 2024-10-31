@@ -1,6 +1,7 @@
 package com.PigeonSkyRace.Pigeon.controller;
 
 import com.PigeonSkyRace.Pigeon.model.Pigeon;
+import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.service.PigeonService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/breeder")
@@ -42,7 +45,17 @@ public class BreederController {
     }
 
     @GetMapping("allResults")
-    public ResponseEntity<?> getAllResults() {
-        return ResponseEntity.status(HttpStatus.OK).body(resultIService.getAllResults());
+    public ResponseEntity<?> getAllResults(HttpServletRequest request) {
+        try {
+            String breederId = (String) request.getAttribute("breederId");
+            if (breederId == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized:  Missing breeder ID.");
+            }
+            List<Result> results = resultIService.getAllBreederResults(breederId);
+            return ResponseEntity.status(HttpStatus.OK).body(results);
+        } catch (DuplicateKeyException e) {
+            String errorMessage = "error: missing pigeons";
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+        }
     }
 }

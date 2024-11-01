@@ -107,15 +107,18 @@ public class ResultServiceImpl implements ResultIService {
 
             double flightTime = FlightTimeUtil.calculateFlightTime(competition.getStartDate(), raceData.getArrivalTime());
 
-            double speed = SpeedCalculatorUtil.calculateSpeed(distance, flightTime);
-
             result.setDistance(distance);
             result.setFlightTime(flightTime);
-            result.setSpeed(speed);
             resultRepository.save(result);
         }
 
         List<Result> results = resultRepository.findByCompetitionId(competitionId);
+
+        double averageDistance = SpeedCalculatorUtil.averageDistance(results);
+        for (Result result : results) {
+            double speed = SpeedCalculatorUtil.calculateSpeed(result.getFlightTime(), averageDistance);
+            result.setSpeed(speed);
+        }
 
         PointsCalculator.calculatePoints(results);
         resultRepository.saveAll(results);

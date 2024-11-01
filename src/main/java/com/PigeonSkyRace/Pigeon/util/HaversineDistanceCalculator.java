@@ -1,7 +1,7 @@
 package com.PigeonSkyRace.Pigeon.util;
 
 public class HaversineDistanceCalculator {
-    private static final double EARTH_RADIUS = 6371;
+    private static final double EARTH_RADIUS = 6371000;
 
     public static double calculateDistance(double startLat, double startLon, double endLat, double endLon) {
         double dLat = Math.toRadians(endLat - startLat);

@@ -34,11 +34,11 @@ class CsvParserUtilTest {
         assertEquals(2, raceDataList.size()); // Check number of parsed records
 
         RaceData raceData1 = raceDataList.get(0);
-        assertEquals("PIGEON123", raceData1.getRingNumber());
+        assertEquals("PIGEON123", raceData1.getBadge());
         assertEquals(LocalDateTime.parse("2024-11-20 10:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), raceData1.getArrivalTime());
 
         RaceData raceData2 = raceDataList.get(1);
-        assertEquals("RACER456", raceData2.getRingNumber());
+        assertEquals("RACER456", raceData2.getBadge());
         assertEquals(LocalDateTime.parse("2024-11-20 11:30:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), raceData2.getArrivalTime());
 
     }

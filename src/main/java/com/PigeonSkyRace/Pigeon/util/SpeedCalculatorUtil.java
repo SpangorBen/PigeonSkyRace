@@ -8,12 +8,14 @@ import java.util.List;
 
 public class SpeedCalculatorUtil {
 
-    public static double calculateSpeed(double flightTime, double averageDistance) {
+    public static double calculateSpeed(double flightTime, double distance, double coefficient) {
         if (flightTime == 0) {
             return 0;
         }
 
-        return averageDistance / flightTime;
+        double speed = distance / flightTime;
+
+        return coefficient / speed;
     }
 
     public static double averageDistance (List<Result> result) {
@@ -24,28 +26,10 @@ public class SpeedCalculatorUtil {
         return averageDistance / result.size();
     }
 
-//    public static void main(String[] args) {
-//        LocalDateTime startDate = LocalDateTime.parse("2024-10-30T08:30:00");
-//        LocalDateTime arrivalDate = LocalDateTime.parse("2024-10-30T12:15:00");
-//        double flightTime = FlightTimeUtil.calculateFlightTime(startDate, arrivalDate);
-//        System.out.println("Flight Time: " + flightTime);
-//        Result result1 = new Result();
-//        result1.setId("6720b6910320027b980be286");
-//        result1.setDistance(25);
-//        Result result2 = new Result();
-//        result2.setDistance(16);
-//        Result result3 = new Result();
-//        result3.setDistance(56);
-//        List<Result> results = new ArrayList<>();
-//        results.add(result1);
-//        results.add(result2);
-//        results.add(result3);
-//        double distance = averageDistance(results);
-//        for (Result result: results){
-//            System.out.println("distance1: " + result.getDistance());
-//        }
-//        System.out.println("Distance: " + distance);
-//        double speed = calculateSpeed(flightTime, distance);
-//        System.out.println("Speed: " + speed + " km/min");
-//    }
+    public static double calculateCoefficient(double distance, double averageDistance) {
+        double coefficient = 0;
+        coefficient = averageDistance / distance;
+        return coefficient;
+    }
+    
 }

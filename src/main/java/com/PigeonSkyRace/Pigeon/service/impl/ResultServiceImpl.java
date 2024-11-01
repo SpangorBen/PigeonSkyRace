@@ -116,7 +116,8 @@ public class ResultServiceImpl implements ResultIService {
 
         double averageDistance = SpeedCalculatorUtil.averageDistance(results);
         for (Result result : results) {
-            double speed = SpeedCalculatorUtil.calculateSpeed(result.getFlightTime(), averageDistance);
+            double coefficient = SpeedCalculatorUtil.calculateCoefficient(result.getDistance(), averageDistance);
+            double speed = SpeedCalculatorUtil.calculateSpeed(result.getFlightTime(), result.getDistance(), coefficient);
             result.setSpeed(speed);
         }
 

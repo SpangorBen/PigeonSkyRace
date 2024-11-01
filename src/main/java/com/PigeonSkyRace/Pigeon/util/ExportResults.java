@@ -27,30 +27,38 @@ public class ExportResults {
         Font font = FontFactory.getFont(FontFactory.HELVETICA);
         font.setColor(Color.WHITE);
 
-        cell.setPhrase(new Phrase("speed", font));
-
+        cell.setPhrase(new Phrase("ranking", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("distance", font));
+        cell.setPhrase(new Phrase("colombi", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("point", font));
+        cell.setPhrase(new Phrase("badge", font));
+
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("arrival date", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("badge", font));
+        cell.setPhrase(new Phrase("distance", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("speed", font));
+        table.addCell(cell);
+
+        cell.setPhrase(new Phrase("point", font));
         table.addCell(cell);
     }
 
     private void writeTableData(PdfPTable table) {
         for (Result result : listResults) {
-            table.addCell((result.getSpeed() + "m/min"));
-            table.addCell(String.valueOf(result.getDistance()));
-            table.addCell(String.valueOf(result.getPoints()));
-            table.addCell(formatArrivalDate(result.getArrivalDate()));
+            table.addCell(String.valueOf(result.getRanking()));
+            table.addCell(result.getPigeon().getName());
             table.addCell(String.valueOf(result.getPigeon().getBadge()));
+            table.addCell(formatArrivalDate(result.getArrivalDate()));
+            table.addCell(String.valueOf(result.getDistance()));
+            table.addCell((result.getSpeed() + "m/min"));
+            table.addCell(String.valueOf(result.getPoints()));
         }
     }
 
@@ -59,10 +67,6 @@ public class ExportResults {
         int minutes = arrivalDate.getMinute();
         int seconds = arrivalDate.getSecond();
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
-
-    public static String badge(String pigeonId){
-        return pigeonRepository.findById(pigeonId).get().getBadge();
     }
 
     public void export(HttpServletResponse response) throws DocumentException, IOException {
@@ -79,9 +83,9 @@ public class ExportResults {
 
         document.add(p);
 
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] {1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
+        table.setWidths(new float[] {1.5f, 3.5f, 3.0f, 3.0f, 1.5f, 2.0f, 2.5f});
         table.setSpacingBefore(10);
 
         writeTableHeader(table);

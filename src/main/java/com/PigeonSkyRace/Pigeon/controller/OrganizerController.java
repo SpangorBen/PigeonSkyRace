@@ -38,8 +38,8 @@ public class OrganizerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCompetition);
     }
 
-    @PutMapping("/updateCompetition")
-    public ResponseEntity<?> updateCompetition(@RequestParam String id, @RequestParam String badge) {
+    @PutMapping("/{id}/addPigeonToCompetition")
+    public ResponseEntity<?> updateCompetition(@PathVariable String id, @RequestParam String badge) {
         if (!StringUtils.hasText(id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("competition id is required");
         }
@@ -55,8 +55,8 @@ public class OrganizerController {
         }
     }
 
-    @PostMapping("/displayAllCompetitionResults")
-    public ResponseEntity<?> displayAllCompetitionResults(@RequestParam String competitionId) {
+    @PostMapping("/{competitionId}/displayAllCompetitionResults")
+    public ResponseEntity<?> displayAllCompetitionResults(@PathVariable String competitionId) {
         List<Result> results = resultService.getCompetitionResults(competitionId);
         return ResponseEntity.status(HttpStatus.CREATED).body(results);
     }

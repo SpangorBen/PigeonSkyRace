@@ -19,7 +19,6 @@ public class Result {
     private double speed;
     private int ranking;
     private double distance;
-    private LocalTime time;
     private double flightTime;
     private LocalDateTime arrivalDate;
 

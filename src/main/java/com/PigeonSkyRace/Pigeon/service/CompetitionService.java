@@ -9,4 +9,5 @@ public interface CompetitionService {
     Competition addCompetition(Competition competition);
     Optional<Result> updateCompetition(String id, String badge);
     Competition getCompetitionById(String competitionId);
+    Competition closeCompetition(String competitionId);
 }

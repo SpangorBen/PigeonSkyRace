@@ -49,4 +49,14 @@ public class CompetitionServiceImpl implements com.PigeonSkyRace.Pigeon.service.
     public Competition getCompetitionById(String competitionId) {
         return competitionRepository.findById(competitionId).orElseThrow(() -> new IllegalArgumentException("Competition not found"));
     }
+
+    @Override
+    public Competition closeCompetition(String competitionId) {
+        Competition competition = getCompetitionById(competitionId);
+        if(competition.getIsOpen().equals(true)) {
+            competition.setIsOpen(false);
+            return competitionRepository.save(competition);
+        }
+        return null;
+    }
 }

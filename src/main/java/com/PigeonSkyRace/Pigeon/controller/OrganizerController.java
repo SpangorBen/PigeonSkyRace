@@ -60,7 +60,7 @@ public class OrganizerController {
         List<Result> results = resultService.getCompetitionResults(competitionId);
         return ResponseEntity.status(HttpStatus.CREATED).body(results);
     }
-    
+
     @PostMapping("/{competitionId}/results")
     public ResponseEntity<?> uploadRaceData(@RequestParam("file")MultipartFile file, @PathVariable String competitionId) {
 
@@ -71,5 +71,14 @@ public class OrganizerController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/{competitionId}/closeCompetition")
+    public ResponseEntity<?> closeCompetition(@PathVariable String competitionId) {
+        Competition competition = competitionService.closeCompetition(competitionId);
+        if (competition == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Competition not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(competition);
     }
 }

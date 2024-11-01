@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,13 +49,12 @@ public class ResultServiceImpl implements ResultIService {
                 .filter(p -> breederId.equals(p.getBreederId()))
                 .map(Pigeon::getId)
                 .collect(Collectors.toSet());
-
         if (pigeonIds.isEmpty()) {
             throw new IllegalArgumentException("no pigeons found for this breeder id");
         }
 
         return resultRepository.findAll().stream()
-                .filter(result -> pigeonIds.contains(result.getPigeon().getId()))
+                .filter(result -> pigeonIds.contains(result.getPigeon().getId())).sorted(Comparator.comparingInt(Result::getRanking))
                 .collect(Collectors.toList());
     }
 

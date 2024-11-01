@@ -31,5 +31,5 @@ public class SpeedCalculatorUtil {
         coefficient = averageDistance / distance;
         return coefficient;
     }
-    
+
 }

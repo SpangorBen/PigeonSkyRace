@@ -14,7 +14,7 @@ import java.util.List;
 public class Breeder {
     @Id
     private String id;
-    private String name;
+    private String name; // colombier name, unique
     private String latitude;
     private String longitude;
     private String password;

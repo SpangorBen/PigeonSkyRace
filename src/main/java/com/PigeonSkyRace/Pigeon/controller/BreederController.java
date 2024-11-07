@@ -5,14 +5,15 @@ import com.PigeonSkyRace.Pigeon.model.Result;
 import com.PigeonSkyRace.Pigeon.service.PigeonService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
 import com.PigeonSkyRace.Pigeon.util.ExportResults;
-import com.PigeonSkyRace.Pigeon.util.PigeonValidator;
 import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/breeder")
@@ -31,15 +33,18 @@ public class BreederController {
     private ResultIService resultIService;
 
     @PostMapping("/addPigeon")
-    public ResponseEntity<?> addPigeon(HttpServletRequest request, @RequestBody Pigeon pigeon) {
+    public ResponseEntity<?> addPigeon(HttpServletRequest request,@Valid @RequestBody Pigeon pigeon, BindingResult result) {
         try {
             String breederId = (String) request.getAttribute("breederId");
             if (breederId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized:  Missing breeder ID.");
             }
-            String validationError = PigeonValidator.validatePigeonData(pigeon);
-            if (validationError != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+
+            if (result.hasErrors()) {
+                List<String> errors = result.getFieldErrors().stream()
+                        .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                        .collect(Collectors.toList());
+                return ResponseEntity.badRequest().body(errors);
             }
 
             pigeon.setBreederId(breederId);
@@ -51,27 +56,25 @@ public class BreederController {
         }
     }
 
-    @GetMapping("getAllPigeons")
-    public ResponseEntity<?> getAllPigeons() {
-        return ResponseEntity.status(HttpStatus.OK).body(pigeonService.getAllPigeons());
+
+    @GetMapping("/getAllPigeons")
+    public ResponseEntity<List<Pigeon>> getAllPigeons() {
+        List<Pigeon> pigeons = pigeonService.getAllPigeons();
+        return ResponseEntity.status(HttpStatus.OK).body(pigeons);
     }
 
-    @GetMapping("allResults")
+    @GetMapping("/allResults")
     public ResponseEntity<?> getAllResults(HttpServletRequest request) {
-        try {
-            String breederId = (String) request.getAttribute("breederId");
-            if (breederId == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized:  Missing breeder ID.");
-            }
-            List<Result> results = resultIService.getAllBreederResults(breederId);
-            return ResponseEntity.status(HttpStatus.OK).body(results);
-        } catch (DuplicateKeyException e) {
-            String errorMessage = "error: missing pigeons";
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
+        String breederId = (String) request.getAttribute("breederId");
+        if (breederId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Missing breeder ID.");
         }
+
+        List<Result> results = resultIService.getAllBreederResults(breederId);
+        return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
-    @GetMapping("exportResults")
+    @GetMapping("/exportResults")
     public ResponseEntity<?> exportResults(HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException {
         String breederId = (String) request.getAttribute("breederId");
         if(breederId == null) {

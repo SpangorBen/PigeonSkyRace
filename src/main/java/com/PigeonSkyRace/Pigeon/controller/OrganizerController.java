@@ -7,16 +7,18 @@ import com.PigeonSkyRace.Pigeon.service.CompetitionService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
 import com.PigeonSkyRace.Pigeon.util.CompetitionValidator;
 import com.PigeonSkyRace.Pigeon.util.CsvParserUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/organizer")
 public class OrganizerController {
@@ -28,11 +30,14 @@ public class OrganizerController {
     private ResultIService resultService;
 
     @PostMapping("/addCompetition")
-    public ResponseEntity<?> addCompetition(@RequestBody Competition competition) {
-        String validationError = CompetitionValidator.validateCompetitionData(competition);
-        if (validationError != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationError);
+    public ResponseEntity<?> addCompetition(@Valid @RequestBody Competition competition, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
         }
+        competition.setIsOpen(true);
 
         Competition savedCompetition = competitionService.addCompetition(competition);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCompetition);
@@ -40,9 +45,6 @@ public class OrganizerController {
 
     @PutMapping("/{id}/addPigeonToCompetition")
     public ResponseEntity<?> updateCompetition(@PathVariable String id, @RequestParam String badge) {
-        if (!StringUtils.hasText(id)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("competition id is required");
-        }
         if (!StringUtils.hasText(badge)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("pigeon badge is required");
         }

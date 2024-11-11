@@ -1,10 +1,10 @@
 package com.PigeonSkyRace.Pigeon.repository;
 
-import com.PigeonSkyRace.Pigeon.model.Breeder;
+import com.PigeonSkyRace.Pigeon.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface BreederRepository extends MongoRepository<Breeder, String> {
-    Optional<Breeder> findByEmail(String email);
+public interface BreederRepository extends MongoRepository<User, String> {
+    Optional<User> findByEmail(String email);
 }

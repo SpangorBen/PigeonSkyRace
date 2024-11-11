@@ -12,7 +12,7 @@ import java.util.List;
 @Document
 @AllArgsConstructor
 @NoArgsConstructor
-public class Breeder {
+public class User {
     @Id
     private String id;
 
@@ -20,11 +20,11 @@ public class Breeder {
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
 
-    @NotNull(message = "Latitude cannot be null")
+    @Null
     @Pattern(regexp = "^-?\\d{1,2}\\.\\d+$", message = "Invalid latitude format")
     private String latitude;
 
-    @NotNull(message = "Longitude cannot be null")
+    @Null
     @Pattern(regexp = "^-?\\d{1,3}\\.\\d+$", message = "Invalid longitude format")
     private String longitude;
 
@@ -35,6 +35,9 @@ public class Breeder {
     @NotNull(message = "Email cannot be null")
     @Email(message = "Email should be valid")
     private String email;
+
+    @Pattern(regexp = "^(breeder|organizer)$", message = "role must be organizer or breeder")
+    private String role;
 
     @DocumentReference
     private List<Pigeon> pigeons;

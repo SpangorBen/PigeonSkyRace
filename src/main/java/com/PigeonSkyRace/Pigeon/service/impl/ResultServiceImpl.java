@@ -126,6 +126,7 @@ public class ResultServiceImpl implements ResultIService {
     }
     @Override
     public List<Result> getAllResults() {
-        return resultRepository.findAll();
+        return resultRepository.findAll().stream().sorted(Comparator.comparingInt(Result::getRanking))
+                .collect(Collectors.toList());
     }
 }

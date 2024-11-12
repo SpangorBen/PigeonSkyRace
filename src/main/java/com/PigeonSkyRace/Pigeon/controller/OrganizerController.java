@@ -1,10 +1,13 @@
 package com.PigeonSkyRace.Pigeon.controller;
 
+import com.PigeonSkyRace.Pigeon.dto.CompetitionRequest;
 import com.PigeonSkyRace.Pigeon.dto.RaceData;
 import com.PigeonSkyRace.Pigeon.model.Competition;
 import com.PigeonSkyRace.Pigeon.model.Result;
+import com.PigeonSkyRace.Pigeon.model.Saison;
 import com.PigeonSkyRace.Pigeon.service.CompetitionService;
 import com.PigeonSkyRace.Pigeon.service.ResultIService;
+import com.PigeonSkyRace.Pigeon.service.SaisonService;
 import com.PigeonSkyRace.Pigeon.util.CsvParserUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -29,6 +32,8 @@ public class OrganizerController {
 
     @Autowired
     private ResultIService resultService;
+    @Autowired
+    private SaisonService saisonService;
 
     private ResponseEntity<String> validateUser(HttpServletRequest request) {
         String userId = (String) request.getAttribute("userId");
@@ -40,8 +45,19 @@ public class OrganizerController {
         return null;
     }
 
+    @PostMapping("/addSaison")
+    public ResponseEntity<?> addSaison(HttpServletRequest request, @Valid @RequestBody Saison saison, BindingResult bindingResult) {
+        ResponseEntity<String> validationResponse = validateUser(request);
+        if (validationResponse != null) {
+            return validationResponse;
+        }
+        Saison savedSaison = saisonService.addSaison(saison);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSaison);
+
+    }
+
     @PostMapping("/addCompetition")
-    public ResponseEntity<?> addCompetition(HttpServletRequest request, @Valid @RequestBody Competition competition, BindingResult result) {
+    public ResponseEntity<?> addCompetition(HttpServletRequest request, @Valid @RequestBody CompetitionRequest competitionRequest, BindingResult result) {
         ResponseEntity<String> validationResponse = validateUser(request);
         if (validationResponse != null) {
             return validationResponse;
@@ -53,9 +69,15 @@ public class OrganizerController {
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
-        competition.setIsOpen(true);
 
-        Competition savedCompetition = competitionService.addCompetition(competition);
+        Saison saison = saisonService.getSaison(competitionRequest.getSaisonName());
+        if (saison == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Saison not found");
+        }
+        competitionRequest.getCompetition().setIsOpen(true);
+        competitionRequest.getCompetition().setSaisonId(saison.getId());
+
+        Competition savedCompetition = competitionService.addCompetition(competitionRequest.getCompetition());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCompetition);
     }
 

@@ -55,7 +55,7 @@ public class AuthController {
                         .withExpiresAt(new Date(System.currentTimeMillis() + jwtExpirationTime))
                         .sign(Algorithm.HMAC512(jwtSecret));
 
-                return ResponseEntity.ok(Map.of("token", token, "expiresIn", jwtExpirationTime / 1000));
+                return ResponseEntity.ok(Map.of("token", token));
             }
         }
         logger.warning("Unauthorized login attempt for email: " + authRequest.getEmail());

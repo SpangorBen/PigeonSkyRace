@@ -110,11 +110,11 @@ public class BreederController {
     }
 
     @GetMapping("/exportAllResults")
-    public ResponseEntity<?> exportAllResults(HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException {
-        ResponseEntity<String> validationResponse = validateUser(request);
-        if (validationResponse != null) {
-            return validationResponse;
-        }
+    public ResponseEntity<?> exportAllResults(HttpServletResponse response /* , HttpServletRequest request*/) throws DocumentException, IOException {
+//        ResponseEntity<String> validationResponse = validateUser(request);
+//        if (validationResponse != null) {
+//            return validationResponse;
+//        }
 
         response.setContentType("application/pdf");
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");

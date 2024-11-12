@@ -108,4 +108,26 @@ public class BreederController {
         exporter.export(response);
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
+
+    @GetMapping("/exportAllResults")
+    public ResponseEntity<?> exportAllResults(HttpServletResponse response, HttpServletRequest request) throws DocumentException, IOException {
+        ResponseEntity<String> validationResponse = validateUser(request);
+        if (validationResponse != null) {
+            return validationResponse;
+        }
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=results_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        List<Result> results = resultIService.getAllResults();
+
+        ExportResults exporter = new ExportResults(results);
+        exporter.export(response);
+        return ResponseEntity.status(HttpStatus.OK).body(results);
+    }
 }

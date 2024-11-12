@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ResultIService {
     List<Result> getAllBreederResults(String breederId);
+    List<Result> getAllResults();
     void processRaceData(String competitionId, List<RaceData> raceDataList);
     List<Result> getCompetitionResults(String competitionId);
 }

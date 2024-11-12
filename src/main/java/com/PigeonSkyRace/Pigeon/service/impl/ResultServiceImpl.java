@@ -124,4 +124,8 @@ public class ResultServiceImpl implements ResultIService {
         PointsCalculator.calculatePoints(results);
         resultRepository.saveAll(results);
     }
+    @Override
+    public List<Result> getAllResults() {
+        return resultRepository.findAll();
+    }
 }

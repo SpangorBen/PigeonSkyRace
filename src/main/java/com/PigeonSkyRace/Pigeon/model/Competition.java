@@ -40,4 +40,6 @@ public class Competition {
 
     @NotNull(message = "Type cannot be null")
     private TypeEnum type;
+
+    private String saisonId;
 }

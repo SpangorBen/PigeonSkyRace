@@ -46,11 +46,19 @@ public class OrganizerController {
     }
 
     @PostMapping("/addSaison")
-    public ResponseEntity<?> addSaison(HttpServletRequest request, @Valid @RequestBody Saison saison, BindingResult bindingResult) {
+    public ResponseEntity<?> addSaison(HttpServletRequest request, @Valid @RequestBody Saison saison, BindingResult result) {
         ResponseEntity<String> validationResponse = validateUser(request);
         if (validationResponse != null) {
             return validationResponse;
         }
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+
         Saison savedSaison = saisonService.addSaison(saison);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSaison);
 

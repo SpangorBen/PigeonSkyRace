@@ -23,8 +23,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/organizer/**").hasRole("ORGANIZER")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/organizer/**").permitAll()
                         .requestMatchers("/api/breeder/**").permitAll()
                         .anyRequest().authenticated()
                 )

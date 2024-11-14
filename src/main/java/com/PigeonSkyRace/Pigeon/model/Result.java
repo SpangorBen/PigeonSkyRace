@@ -34,4 +34,13 @@ public class Result {
 
     @DocumentReference
     private Competition competition;
+
+    public Result(double speed) {
+        this.speed = speed;
+        this.points = 0;
+        this.ranking = 0;
+        this.distance = 0.0;
+        this.flightTime = 0.0;
+        this.arrivalDate = LocalDateTime.now();
+    }
 }
